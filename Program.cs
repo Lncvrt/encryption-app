@@ -60,7 +60,7 @@ class Program {
                 var key = new byte[16];
                 using var rng = RandomNumberGenerator.Create();
                 rng.GetBytes(key);
-                Console.WriteLine("Generated Key (hex): " + Convert.ToHexStringLower(key));
+                Console.WriteLine("Generated Key: " + Convert.ToHexStringLower(key));
             }
             else if (selected == 3)
             {

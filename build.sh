@@ -2,7 +2,6 @@
 set -e
 
 cfg=Release
-tfm=net9.0
 outdir=bin/$cfg
 zipdir=$(pwd)/builds
 rids=(
@@ -22,12 +21,16 @@ if [[ -z "$version" ]]; then
   version="0.0.0"
 fi
 
+rm -rf bin
+rm -rf obj
 rm -rf "$zipdir"
 mkdir -p "$zipdir"
 
 name=$(basename "$projfile" .csproj)
 
 for rid in "${rids[@]}"; do
-  dotnet publish "$projfile" -c $cfg -r $rid --self-contained false -o "$outdir/$rid/publish"
-  7z a -tzip "$zipdir/${name}-${version}-${rid}.zip" "$outdir/$rid/publish/*"
+  dotnet publish "$projfile" -c $cfg -r $rid --self-contained true -o "$outdir/$rid/publish"
+  pushd "$outdir/$rid/publish"
+  7z a -tzip "$zipdir/${name}-${version}-${rid}.zip" ./*
+  popd
 done
